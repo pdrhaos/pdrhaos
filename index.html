@@ -750,9 +750,127 @@
 
     </footer>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
-    <script src="script.js"></script>
+    const galos = [
+        "images/imagem_2026-10-06_174416040.png",
+        "images/imagem_2026-10-06_174425646.png",
+        "images/imagem_2026-10-06_174430993.png",
+        "images/imagem_2026-10-06_174437195.png",
+        "images/imagem_2026-10-06_174445406.png",
+        "images/imagem_2026-10-06_174451959.png",
+        "images/imagem_2026-10-06_174457945.png",
+        "images/imagem_2026-10-06_174504111.png",
+        "images/imagem_2026-10-06_174509348.png",
+        "images/imagem_2026-10-06_174515420.png"
+    ];
+
+    let fichas = 4;
+    let girando = false;
+
+    const slot1 = document.getElementById("slot1");
+    const slot2 = document.getElementById("slot2");
+    const slot3 = document.getElementById("slot3");
+
+    const fichasTexto = document.getElementById("chips");
+    const botaoGirar = document.getElementById("spinButton");
+    const botaoReset = document.getElementById("resetButton");
+    const resultado = document.getElementById("machineResult");
+
+    function atualizarFichas() {
+        fichasTexto.innerText = fichas;
+    }
+
+    function numeroAleatorio() {
+        return Math.floor(Math.random() * galos.length);
+    }
+
+    function girar() {
+
+        if (girando) return;
+
+        if (fichas <= 0) {
+            resultado.innerText = "SEM FICHAS! 😭";
+            return;
+        }
+
+        fichas--;
+        atualizarFichas();
+
+        girando = true;
+        botaoGirar.disabled = true;
+
+        resultado.innerText = "GIRANDO... 🐓";
+
+        let contador = 0;
+
+        const animacao = setInterval(function () {
+
+            slot1.src = galos[numeroAleatorio()];
+            slot2.src = galos[numeroAleatorio()];
+            slot3.src = galos[numeroAleatorio()];
+
+            contador++;
+
+            if (contador >= 20) {
+
+                clearInterval(animacao);
+
+                const galo1 = numeroAleatorio();
+                const galo2 = numeroAleatorio();
+                const galo3 = numeroAleatorio();
+
+                slot1.src = galos[galo1];
+                slot2.src = galos[galo2];
+                slot3.src = galos[galo3];
+
+                if (galo1 === galo2 && galo2 === galo3) {
+
+                    resultado.innerText = "🎉 JACKPOT! VOCÊ GANHOU! 🐓";
+
+                    resultado.style.transform = "scale(1.2)";
+
+                    setTimeout(function () {
+                        resultado.style.transform = "scale(1)";
+                    }, 500);
+
+                } else {
+
+                    resultado.innerText = "NÃO FOI DESSA VEZ! 🐓";
+
+                }
+
+                girando = false;
+                botaoGirar.disabled = false;
+            }
+
+        }, 100);
+    }
+
+    function resetar() {
+
+        fichas = 4;
+        girando = false;
+
+        atualizarFichas();
+
+        slot1.src = galos[0];
+        slot2.src = galos[1];
+        slot3.src = galos[2];
+
+        resultado.innerText = "BOA SORTE! 🐓";
+
+        botaoGirar.disabled = false;
+    }
+
+    botaoGirar.addEventListener("click", girar);
+    botaoReset.addEventListener("click", resetar);
+
+    resetar();
+
+});
+</script>
 
 </body>
-
 </html>
